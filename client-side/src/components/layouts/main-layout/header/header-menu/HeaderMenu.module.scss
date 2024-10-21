@@ -1,0 +1,11 @@
+.header_menu {
+	@apply items-center gap-x-2 ml-auto  flex  bg-transparent;
+
+	.avatar {
+		@apply rounded-full;
+	}
+
+	.icon {
+		@apply size-4 mr-2;
+	}
+}

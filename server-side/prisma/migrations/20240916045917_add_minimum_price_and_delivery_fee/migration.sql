@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "store" ADD COLUMN     "deliveryPrice" INTEGER NOT NULL DEFAULT 300,
+ADD COLUMN     "minOrderPrice" INTEGER NOT NULL DEFAULT 1000;

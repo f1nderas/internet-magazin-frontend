@@ -1,0 +1,21 @@
+.imageContainer {
+	@apply relative w-full h-full md:w-[500px] md:h-[500px] rounded-lg;
+	> .image {
+		@apply rounded-lg h-full;
+	}
+	> .overlay {
+		@apply absolute rounded-lg top-0 left-0 right-0 bottom-0 bg-[rgba(0,0,0,0.5)] flex items-center justify-center;
+
+		> .overlayText {
+			@apply text-3xl text-white uppercase;
+		}
+	}
+}
+
+.gallery {
+	@apply flex mt-6 gap-6;
+
+	> .item {
+		@apply duration-300 border rounded-lg overflow-hidden;
+	}
+}

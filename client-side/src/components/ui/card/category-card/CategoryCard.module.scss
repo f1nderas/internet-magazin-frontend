@@ -1,0 +1,11 @@
+.card {
+	@apply bg-white relative;
+
+	img {
+		@apply rounded-lg w-full;
+	}
+
+	> .title {
+		@apply text-3xl font-semibold text-primary-foreground text-center line-clamp-1 absolute bottom-2 left-0 right-0 bg-primary/50;
+	}
+}

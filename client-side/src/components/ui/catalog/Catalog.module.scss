@@ -1,0 +1,30 @@
+.wrapper {
+	@apply mt-10;
+	.header {
+		@apply md:flex md:items-center md:justify-between mb-4;
+
+		> .info {
+			@apply max-w-2xl px-4 lg:max-w-full lg:px-0;
+
+			> h1 {
+				@apply text-2xl font-bold;
+			}
+
+			> p {
+				@apply mt-2 text-sm text-muted-foreground;
+			}
+		}
+
+		> a {
+			@apply hidden text-sm font-medium text-primary hover:text-primary/75 md:flex;
+		}
+	}
+
+	.catalog {
+		@apply flex items-center w-full;
+
+		> .products {
+			@apply mt-2 w-full grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-6 gap-8;
+		}
+	}
+}

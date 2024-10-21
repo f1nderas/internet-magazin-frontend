@@ -1,0 +1,23 @@
+version: "3.8"
+services:
+  server:
+    build:
+      context: ./server
+      dockerfile: dockerfile
+    ports:
+      - "5050:5050"
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: "postgresql://postgres:123456@db:5432/f1nderas?schema=public"
+    networks:
+      - app-networks
+
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80"
+    networks:
+      - "app-networks"
