@@ -11,7 +11,6 @@ import { UserModule } from "./user/user.module";
 import { ProductModule } from "./product/product.module";
 import { ReviewModule } from "./review/review.module";
 import { OrderItemModule } from "./orderItem/order-item.module";
-import { WebsocketModule } from './websocket/websocket.module';
 
 @Module({
   imports: [
@@ -26,7 +25,6 @@ import { WebsocketModule } from './websocket/websocket.module';
     StatisticsModule,
     ProductModule,
     ReviewModule,
-    WebsocketModule,
   ],
 })
 export class AppModule {}

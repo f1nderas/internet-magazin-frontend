@@ -22,7 +22,6 @@ export function OrderInfo() {
 	})
 
 	const order = data?.data
-	console.log(order)
 
 	return order ? (
 		<div className='container mx-auto p-6'>
@@ -85,7 +84,8 @@ export function OrderInfo() {
 										{item.product?.title || 'Загрузка...'}
 									</h3>
 									<p className='text-muted-foreground'>
-										{formatPrice(item.product.price)}
+										{formatPrice(item.product.price)} *{' '}
+										{item.quantity} шт
 									</p>
 								</div>
 

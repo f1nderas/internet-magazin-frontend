@@ -1,9 +1,8 @@
-version: "3.8"
 services:
   server:
     build:
-      context: ./server
-      dockerfile: dockerfile
+      context: ./server-side
+      dockerfile: Dockerfile
     ports:
       - "5050:5050"
     depends_on:
@@ -11,13 +10,38 @@ services:
     environment:
       DATABASE_URL: "postgresql://postgres:123456@db:5432/f1nderas?schema=public"
     networks:
-      - app-networks
+      - app-network
 
   client:
     build:
-      context: ./client
+      context: ./client-side
       dockerfile: Dockerfile
+      args:
+        APP_ENV: "production"
+        APP_URL: "http://localhost:3000"
+        APP_DOMAIN: "localhost"
+        SERVER_URL: "http://server:5050"
     ports:
       - "3000:80"
     networks:
-      - "app-networks"
+      - "app-network"
+    environment:
+      - REACT_APP_API_URL=http://server:5050
+
+  db:
+    image: postgres:13-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_DB: f1nderas
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+volumes:
+  db-data:
+
+networks:
+  app-network:

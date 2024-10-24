@@ -1,29 +1,39 @@
-# Используем образ линус Alpine с версией node 14
-FROM node:19.5.0-alpine
+# Stage 1: Build the application
+FROM node:18-alpine AS builder
 
-# Указываем нашу рабочаю дерикторию
 WORKDIR /app
 
-# Скопировать package.json и package-lock.json внутрь контейнера
+# Установка зависимостей
 COPY package*.json ./
-
-# Устанавливаем зависимости
 RUN npm install
 
-# Копируем оставшееся приложения в контейнер
+# Копирование исходного кода
 COPY . .
 
-# Устанавливаем Prisma
-RUN npm install -g prisma
+# Генерация Prisma client
+RUN npx prisma generate
 
-# Генерируем Prisma client
-RUN prisma generate
+# Сборка приложения NestJS
+RUN npm run build
 
-# Кипируем Prisma schema
-COPY prisma/schema.prisma ./prisma/
+# Stage 2: Run the application
+FROM node:18-alpine
 
-# Открыть порт в нашем контейнере
+WORKDIR /app
+
+# Установка только production-зависимостей
+COPY package*.json ./
+RUN npm install --production
+
+# Копирование собранного приложения и необходимых файлов
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/prisma ./prisma
+COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
+COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
+COPY --from=builder /app/node_modules/prisma ./node_modules/prisma
+
+# Открытие порта
 EXPOSE 5050
 
-# Запускаем наш сервер
-CMD ["npm","start"]
+# Запуск приложения
+CMD ["node", "dist/main.js"]

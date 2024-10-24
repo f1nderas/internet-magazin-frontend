@@ -1,11 +1,8 @@
 import Image from 'next/image'
-import { useEffect, useState } from 'react'
 
 import { Card } from '@/components/ui/Card'
 
 import { useGetOrderItems } from '@/hooks/queries/orderItems/useGetOrderItems'
-
-import { productService } from '@/services/product.service'
 
 import { ICartItem } from '@/shared/types/cart.interface'
 

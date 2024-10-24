@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-	env: {
+	publicRuntimeConfig: {
 		APP_ENV: process.env.APP_ENV,
 		APP_URL: process.env.APP_URL,
 		APP_DOMAIN: process.env.APP_DOMAIN,
@@ -10,13 +10,13 @@ const nextConfig = {
 		remotePatterns: [
 			{
 				protocol: 'https',
-				hostname: 'avatars.yandex.net',
+				hostname: 'avatars.yandex.net'
 			},
 			{
 				protocol: 'https',
-				hostname: 'lh3.googleusercontent.com',
-			},
-		],
+				hostname: 'lh3.googleusercontent.com'
+			}
+		]
 	},
 	async rewrites() {
 		return [
@@ -26,6 +26,6 @@ const nextConfig = {
 			}
 		]
 	}
-};
+}
 
-export default nextConfig;
+export default nextConfig

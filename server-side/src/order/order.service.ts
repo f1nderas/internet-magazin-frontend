@@ -4,11 +4,10 @@ import {
   Injectable,
   NotFoundException,
 } from "@nestjs/common";
-import { EnumOrderStatus, EnumProcessingStatus } from "@prisma/client";
+import { EnumOrderStatus } from "@prisma/client";
 import { PrismaService } from "src/prisma.service";
 import { OrderDto } from "./dto/order.dto";
 import { PaymentStatusDto } from "./dto/payment-status.dto";
-import { WebsocketGateway } from "src/websocket/websocket.gateway";
 
 const checkout = new YooCheckout({
   shopId: process.env["YOOKASSA_SHOP_ID"],
@@ -17,10 +16,7 @@ const checkout = new YooCheckout({
 
 @Injectable()
 export class OrderService {
-  constructor(
-    private prisma: PrismaService,
-    private websocketGateway: WebsocketGateway
-  ) {}
+  constructor(private prisma: PrismaService) {}
 
   async createPayment(dto: OrderDto, userId: string) {
     const validItems = [];
@@ -100,8 +96,6 @@ export class OrderService {
       },
     });
 
-    this.websocketGateway.sendOrderUpdate(order);
-
     try {
       const payment = await checkout.createPayment({
         amount: {
@@ -147,8 +141,6 @@ export class OrderService {
         },
       });
 
-      this.websocketGateway.sendOrderUpdate(updatedOrder);
-
       return true;
     }
 
@@ -182,58 +174,5 @@ export class OrderService {
     }
 
     return order;
-  }
-
-  async acceptOrder(orderId: string, managerId: string) {
-    const order = await this.prisma.order.findUnique({
-      where: { id: orderId },
-    });
-
-    if (!order) {
-      throw new NotFoundException(`Заказ с ID ${orderId} не найден`);
-    }
-
-    if (order.processingStatus !== EnumProcessingStatus.NOT_ACCEPTED) {
-      throw new BadRequestException("Заказ уже был принят или закрыт");
-    }
-
-    const updatedOrder = await this.prisma.order.update({
-      where: { id: orderId },
-      data: {
-        managerId: managerId,
-        processingStatus: EnumProcessingStatus.ACCEPTED,
-      },
-    });
-
-    this.websocketGateway.sendOrderUpdate(updatedOrder); // уведомление через сокеты
-
-    return updatedOrder;
-  }
-
-  async closeOrder(orderId: string, managerId: string) {
-    const order = await this.prisma.order.findUnique({
-      where: { id: orderId },
-    });
-
-    if (!order) {
-      throw new NotFoundException(`Заказ с ID ${orderId} не найден`);
-    }
-
-    if (order.managerId !== managerId) {
-      throw new BadRequestException(
-        "Только менеджер, принявший заказ, может его закрыть"
-      );
-    }
-
-    const updatedOrder = await this.prisma.order.update({
-      where: { id: orderId },
-      data: {
-        processingStatus: EnumProcessingStatus.CLOSED,
-      },
-    });
-
-    this.websocketGateway.sendOrderUpdate(updatedOrder); // уведомление через сокеты
-
-    return updatedOrder;
   }
 }

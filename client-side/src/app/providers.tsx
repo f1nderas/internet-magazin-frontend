@@ -8,8 +8,6 @@ import { PersistGate } from 'redux-persist/integration/react'
 
 import { persistor, store } from '@/store/store'
 
-import { WebSocketProvider } from './websocket.context'
-
 export function Providers({ children }: PropsWithChildren) {
 	const [client] = useState(
 		new QueryClient({
@@ -25,10 +23,8 @@ export function Providers({ children }: PropsWithChildren) {
 		<QueryClientProvider client={client}>
 			<Provider store={store}>
 				<PersistGate loading={null} persistor={persistor}>
-					<WebSocketProvider>
-						<Toaster />
-						{children}
-					</WebSocketProvider>
+					<Toaster />
+					{children}
 				</PersistGate>
 			</Provider>
 		</QueryClientProvider>

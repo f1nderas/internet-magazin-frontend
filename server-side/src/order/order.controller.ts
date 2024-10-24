@@ -52,20 +52,4 @@ export class OrderController {
     }
     return order;
   }
-
-  @Post(":id/accept")
-  async acceptOrder(
-    @Param("id") orderId: string,
-    @Body("managerId") managerId: string
-  ) {
-    return this.orderService.acceptOrder(orderId, managerId);
-  }
-
-  @Post(":id/close")
-  async closeOrder(
-    @Param("id") orderId: string,
-    @Body("managerId") managerId: string
-  ) {
-    return this.orderService.closeOrder(orderId, managerId);
-  }
 }
