@@ -14,12 +14,12 @@ import {
 } from '@/components/ui/DropdownMenu'
 
 import { STORE_URL } from '@/config/url.config'
-
+ 
 export interface IOrderColumn {
 	id: string
 	user: string
 	phone: string
-	total: string
+	total: number
 	status: string
 	createdAt: string
 }

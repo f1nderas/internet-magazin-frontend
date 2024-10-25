@@ -1,27 +1,19 @@
 'use client'
 
-import { useQuery } from '@tanstack/react-query'
 import Image from 'next/image'
 import { useParams, useRouter } from 'next/navigation'
 
-import { CartItem } from '@/components/layouts/main-layout/header/header-menu/header-cart/cart-item/CartItem'
 import { Card } from '@/components/ui/Card'
-
-import { orderService } from '@/services/order.service'
 
 import { ICartItem } from '@/shared/types/cart.interface'
 
 import { formatPrice } from '@/utils/string/format-price'
+import { useGetOrder } from '@/hooks/queries/orders/useGetOrder'
 
 export function OrderInfo() {
 	const router = useRouter()
 	const params = useParams<{ orderId: string }>()
-	const { data } = useQuery({
-		queryKey: ['get order'],
-		queryFn: () => orderService.getById(params.orderId)
-	})
-
-	const order = data?.data
+	const order = useGetOrder(params.orderId)
 
 	return order ? (
 		<div className='container mx-auto p-6'>
